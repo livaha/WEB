@@ -233,7 +233,7 @@
   console.log( [1,undefined,3].map((x='yes')=>x) ) //[1,'yes',3]
 }
 
-{/**圆括号 */
+{/**6 圆括号 */
   /**不能使用圆括号的情况
     //报错 它们都是变量声明语句，模式不能使用圆括号
     let [(a)] = [1]
@@ -259,7 +259,7 @@
   [(parseInt.prop)] = [3]; // 正确
 }
 
-{/**用途 */
+{/**7 用途 */
   //1 交换变量的值
   let x=1;
   let y=2;
@@ -331,8 +331,8 @@
   for(let [key] of map){}
   //获取键值
   for(let [,value] of map){}
-}
 
-{/**输入模块的指定方法 */
- //const {Button,Input} = require('antd')
+  //7 输入模块的指定方法 
+  //const {Button,Input} = require('antd')
+
 }
