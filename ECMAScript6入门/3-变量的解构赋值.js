@@ -129,7 +129,81 @@
        x // "Hello"
        y // "World"
    }
-
-
-
  }
+
+{/**默认值 */
+  let {x=3} = {};
+  console.log(x) //3
+
+  let {k,o=3} = {k:1}
+  console.log(k) //1
+
+  let {a:b=3} = {};
+  console.log(b) //3
+
+  let {i:j=3} ={i:9}
+  console.log(j) //9
+
+  let {message:msg='say something'} = {};
+  console.log(msg) //say something
+
+  let {c=3}={c:undefined}
+  console.log(c) //3
+  
+  let {d=3}={d:null}
+  console.log(d) //null
+}
+
+{/**注意点 */
+  /*
+  // 错误的写法
+  let x;
+  {x} = {x: 1};
+  // SyntaxError: syntax error
+  //JavaScript 引擎会将{x}理解成一个代码块，从而发生语法错误
+  */
+
+  // 正确的写法
+  let x;
+  ({x} = {x: 1});
+
+  //属性名表达式
+  let arr = [1, 2, 3];
+  let {0 : first, [arr.length - 1] : last} = arr;
+  first // 1
+  last // 3
+}
+
+{/**3 字符串的解构赋值 */
+  const [a,b,c,d,e] = 'hello';
+  console.log(a,b,c,d,e) // h e l l o
+
+  let {length:len} = 'hello'
+  console.log(len) //5
+}
+
+{/**4 数值和布尔值的解构赋值 
+  数值和布尔值的包装对象都有toString属性，因此变量都能取到值*/
+  let {toString:s} = 123
+  console.log(s === Number.prototype.toString) //true
+
+  let {toString:a} = true;
+  console.log(a===Boolean.prototype.toString) //true
+  
+  let {toString:d} = false;
+  console.log(d===Boolean.prototype.toString) //true
+  
+  /*
+  //解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。
+  //由于undefined和null无法转为对象，所以对它们进行解构赋值，都会报错。
+  let { prop: x } = undefined; // TypeError
+  let { prop: y } = null; // TypeError
+  */
+}
+
+{/**5 函数参数的解构赋值 */
+  function add([x,y]){
+    return x+y
+  }
+  console.log(add([2,4])) //6
+}
