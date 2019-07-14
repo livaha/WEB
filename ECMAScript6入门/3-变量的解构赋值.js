@@ -206,4 +206,133 @@
     return x+y
   }
   console.log(add([2,4])) //6
+
+  console.log(  [[1,2],[3,4]].map(([a,b])=>a+b)  ) //[3,7]
+
+  //默认值
+  function move({x=0,y=0}={}){
+    return [x,y]
+  }
+  console.log('\n\n')
+  console.log(move({x:3,y:4})) //[3,4]
+  console.log(move({x:3})) //[3,0]
+  console.log(move({})) //[0,0]
+  console.log(move()) //[0,0]
+
+  //写法不一样得到不一样的结果
+  function move2({x,y}={x:0,y:0}){
+    return [x,y]
+  }
+  console.log('\n\n')
+  console.log(move2({x:3,y:4})) //[3,4]
+  console.log(move2({x:3})) //[3,undefined]
+  console.log(move2({})) //[undefined,undefined]
+  console.log(move2()) //[0,0]
+
+  //undefined就会触发函数参数的默认值。
+  console.log( [1,undefined,3].map((x='yes')=>x) ) //[1,'yes',3]
+}
+
+{/**圆括号 */
+  /**不能使用圆括号的情况
+    //报错 它们都是变量声明语句，模式不能使用圆括号
+    let [(a)] = [1]
+
+    let {x:(c)}={}
+    let ({x:c})={}
+    let {(x:c)}={}
+    let {(x):c}={}
+
+    let {o:({p:p})}={o:{p:2}}
+
+    //报错  函数参数也属于变量声明，因此不能带有圆括号。
+    function f([z]){return z;}
+    function f([z,(x)]){return x;}
+
+    //报错
+    [({p:a}),{x:c}]=[{},{}]
+   */
+
+   //可以使用圆括号的情况只有一种：赋值语句的非模式部分，可以使用圆括号。
+   [(b)] = [3]; // 正确
+  ({ p: (d) } = {}); // 正确
+  [(parseInt.prop)] = [3]; // 正确
+}
+
+{/**用途 */
+  //1 交换变量的值
+  let x=1;
+  let y=2;
+  [x,y]=[y,x];
+  
+  //2 从函数返回多个值
+  //返回一个数组
+  function example(){
+    return [1,2,3]
+  }
+  let [a,b,c]=example();
+
+  //返回一个对象
+  function example2(){
+    return{
+      foo:1,
+      bar:2
+    }
+  }
+  let {foo,bar} = example2()
+  console.log(foo,bar) //1 2
+
+  //3 函数参数的定义
+  //参数有序
+  function f1([x,y,z]){}
+  f1([1,2,3])
+
+  //参数无序
+  function f2({x,y,z}){}
+  f2({z:3,y:3,x:2})
+
+  //4 提取JSON数据，尤其有用
+  let jsonData = {
+    id:4,
+    status:'ok',
+    data:[3,4]
+  };
+
+  let {id,status,data:number}=jsonData;
+  console.log(id,status,number) //4 'ok' [ 3, 4 ]
+
+  /*5 函数参数的默认值
+    jQuery.ajax = function (url, {
+      async = true,
+      beforeSend = function () {},
+      cache = true,
+      complete = function () {},
+      crossDomain = false,
+      global = true,
+      // ... more config
+    } = {}) {
+      // ... do stuff
+    };
+    //指定参数的默认值，避免了在函数体内部再写var foo = config.foo || 'default foo';这样的语句。
+  */
+
+  //6 遍历Map结构
+  const map = new Map();
+  map.set('first','hello');
+  map.set('second','world');
+
+  for(let [key,value] of map){
+    console.log(key+' is ' +value)
+  }
+  // first is hello
+  // second is world
+
+  //获取键名
+  for(let [key] of map){}
+  //获取键值
+  for(let [,value] of map){}
+}
+
+{/**输入模块的指定方法 */
+ //const {Button,Input} = require('antd')
 }
