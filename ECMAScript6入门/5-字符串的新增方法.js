@@ -90,3 +90,84 @@
    console.log(is32Bit("𠮷")) //true
    console.log(is32Bit("a")) //false
  }
+ {/**4 实例方法：normalize() */
+
+ }
+ {/**5 实例方法： includes(),startsWith(),endsWith()
+   * JavaScript 只有indexOf方法，ES6 又提供了三种新方法。 */
+   let s = 'Hello Word!';
+   console.log(s.startsWith('He')); //true
+   console.log(s.endsWith('!')); //true
+   console.log(s.includes('ello ')); //true
+
+   //这三个方法都支持第二个参数，表示开始搜索的位置 
+   console.log(s.startsWith('or',3)); //false
+   console.log(s.startsWith('Wor',6)); //true
+   console.log(s.endsWith('!',5)); //false
+   console.log(s.endsWith('llo',5)); //true
+   console.log(s.includes('ello',5)); //false
+   console.log(s.includes('ord',5)); //true
+ }
+ {/**6 实例方法： repeat() 
+   * repeat方法返回一个新字符串，表示将原字符串重复n次*/
+   console.log('x'.repeat(3));   //xxx
+   console.log('hello'.repeat(3)) //hellohellohello
+   console.log('hello'.repeat(0)) //''
+   //如果tepeat的参数是字符串，则会先转换为数字
+   console.log('na'.repeat('3'))//nanana
+   /**
+    * 以下特殊情况
+    * 1 参数为小数，会被取整
+    * 'na'.repeat(2.9) //nana
+    * 
+    * 2 参数为负数或Infinity，会报错
+    * 'na'.repeat(Infinity) //error
+    * 'na'.repeat(-1) //error
+    * 
+    * 3 参数为0到-1之间的小数，等同于0
+    * 'na'.repeat(-0.9) //''
+    * 
+    * 4 参数NaN赞同于0
+    * 'na'.repeat(NaN) //''
+    * 
+    * 5 参数为字符串，则先转为数字
+    * 'na'.repeat('na') //''
+    * 'na'.repeat('3') //nanana
+    */
+ }
+ {/**7 实例方法：padStart(),padEnd() 
+   * ES2017引入字符串补全长度的功能，如果字符串不够长度，会在头部或尾部补全*/
+   console.log(
+      'x'.padStart(4,'ab'),//abax
+      'x'.padStart(5,'ab'),//ababx
+
+      'x'.padEnd(4,'ab'),//xaba
+      'x'.padEnd(5,'ab'),//xabab
+
+      //如果用来补全的字符串与原字符串，两者长度之和超过最大长度则会截去超出位数的补全字符串
+      'abc'.padStart(10,'1234567890'),//1234567abc
+      //如果省略第二个参数，默认使用空格补全长度
+      'x'.padStart(4),//'   x'
+      'y'.padEnd(3),//'y  '
+
+      //padStart()的常见用途 ：1 为数值补全指定位数，2 提示字符串格式
+      //1 为数值补全指定位数
+      '1'.padStart(10,'0'),//0000000001
+      '12'.padStart(10,'0'),//0000000012
+      '123456'.padStart(10,'0'),//0000123456
+      //2 提示字符串格式
+      '12'.padStart(10,'YYYY-MM-DD'),//YYYY-MM-12
+      '09-12'.padStart(10,'YYYY-MM-DD')//YYYY-09-12
+      )
+ }
+ {/**8 实例方法：trimStart(),trimEnd() 
+   * ES2019新增的这两个方法，与trim()一样，消除字符串空格，返回一个新的字符串，不会修改原始字符串*/
+   const s = '    a bc    ';
+   console.log(s.trim());//'a bc'
+   console.log(s.trimStart());//'a bc    '
+   console.log(s.trimEnd());//'    a bc'
+
+ }
+ {/**9 实例方法：matchAll() */
+   //matchAll()方法返回一个正则表达式在当前字符串的所有匹配，详见《正则的扩展》的一章。
+ }
