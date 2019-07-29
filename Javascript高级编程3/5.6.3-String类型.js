@@ -9,7 +9,7 @@
  * 3 字符串位置方法:indexOf(),lastIndexOf()
  * 4 trim()方法
  * 5 字符串大小写转换方法:toLowerCase(),toLocaleLowerCase(),toUpperCase(),toLocaleUpperCase()
- * 6 字符串的模式匹配方法
+ * 6 字符串的模式匹配方法：:match(),search(),replace(),split()
  * 7 localeCompare()方法
  * 8 fromCharCode()方法
  * 9 HTML方法
@@ -151,10 +151,31 @@
     console.log(col1,col2,col3)
 }
 {/**7 localeCompare()方法 */
+    let str = 'yellow';
+    console.log(
+        str.localeCompare('brik'), //1
+        str.localeCompare('yellow'), //0
+        str.localeCompare('zoo')//-1
+    )
 
+    function determineOrder(val){
+        let result = str.localeCompare(val);
+        if(result<0){
+            console.log(`${str} comes before ${val}`);
+        }
+        else if(result>0){
+            console.log(`${str} comes after ${val}`);
+        }
+        else {
+            console.log(`${str} is equal to ${val}`);
+        }
+    }
+    determineOrder('brikc');//yellow comes after brikc
+    determineOrder('yellow');//yellow is equal to yellow
+    determineOrder('zoo');//yellow comes before zoo
 }
 {/**8 fromCharCode()方法 */
-
+    console.log(String.fromCharCode(103,104,108,111));//ghlo
 }
 {/**9 HTML方法 */
 
