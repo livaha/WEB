@@ -4,6 +4,8 @@
  * 1 检测数组:instanceof,isArray()
  * 2 转换方法:toLocaleString(),toString(),valueOf(),join()
  * 3 栈方法：push(),pop()
+ * 4 队列方法:shift(),unshift() 
+ * 5 重排序法：reverse(),sort() 
  */
 {/**0 创建数组有2种方式
     * 一是Array，二是方括号 */
@@ -103,4 +105,56 @@
     let item = colors.pop();
     console.log(item);//'black'
     console.log(colors.length)//2
+}
+{/**4 队列方法:shift(),unshift() 
+    *shift():从前面删除，unshift()：从前面插入
+    * 使用shift()和push可以像使用队列一样使用数组
+    * 使用unshift()和pop()可以反向模拟队列，即在前端添加项，从末端移除项*/
+    let colors = new Array();
+    let count = colors.push('red','green');
+    console.log(count);//2
+
+    count = colors.push('c');
+    console.log(count);//3
+
+    let item = colors.shift();
+    console.log(item);//'red'
+    console.log(colors.length);//2
+
+    count = colors.unshift('a','b');
+    console.log(colors,count);//[ 'a', 'b', 'green', 'c' ] 4
+
+    count = colors.unshift('black');
+    console.log(colors,count);//[ 'black', 'a', 'b', 'green', 'c' ] 5
+
+    item = colors.pop();
+    console.log(item);//'c'
+    console.log(colors.length);//4
+
+}
+{/**5 重排序法：reverse(),sort() ，两函数都改变原来的数组
+    * reverse()会反转数组项的顺序，sort()按顺序排列数组项(不一定是按数字大小)
+    * sort()方法会调用每个数组项的toString()转型方法，然后比较得到的字符串，以确定如何排序*/
+    let values = [2,4,6,3,2,1,9,15,13];
+    values.reverse();
+    console.log(values);//[ 13, 15, 9, 1, 2, 3, 6, 4, 2 ]
+    values.sort();
+    console.log(values);//[ 1, 13, 15, 2, 2, 3, 4, 6, 9 ] //注意，13，15在前面
+
+    /**比较函数：第一个参数应该位于第二个之前则返回一个负数，相等返回0，位于第二个参数之后则返回正数 */
+    function compare(val1,val2){
+        /*if(val1 < val2){
+            return -1;
+        }else if(val1 > val2){
+            return 1;
+        }else{
+            return 0;
+        }*/
+        return val1-val2;
+    }
+    //将比较作为参数传给sort，数值仍然保持正确的顺序，但可适用更多的数据类型
+    let nums = [1,3,5,6,2,21,12,14,9];    
+    nums.sort(compare);
+    console.log(nums)//[ 1, 2, 3, 5, 6, 9, 12, 14, 21 ]
+
 }
