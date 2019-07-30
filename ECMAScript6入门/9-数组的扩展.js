@@ -180,3 +180,108 @@
         }
     }
 }
+{/**2 Array.from() 
+    Array.from方法用于将两类对象转为真正的数组：类似数组的对象和可遍历(iterable)对象，包括ES6新增的Set和Map*/
+    {//将类似数组的对象转为真正的数组
+        let arrayLike = {
+            '0':'a',
+            '1':'b',
+            '2':'c',
+            length:3
+        };
+        //ES5写法
+        let arr1 = [].slice.call(arrayLike);
+        console.log(arr1);//[ 'a', 'b', 'c' ]
+
+        //ES6写法
+        let arr2 = Array.from(arrayLike);
+        console.log(arr2);//[ 'a', 'b', 'c' ]
+    }
+    {//常见类似数组的对象是DOM操作返回的NodeList集合，以及函数内部的arguments对象，Array.from都可以将它们转为真正的数组
+        //NodeList对象
+        /*
+        let ps = document.querySelectorAll('p');
+        Array.from(ps).filter(p=>{
+            return p.textContent.length>100;
+        });
+        */
+        //arguments对象
+        function foo(){
+            let args = Array.from(arguments);
+        }
+        //扩展运算符(...)也可以将某些数据结构转为数组        
+        function foo2(){
+            let args = [...arguments];
+        }
+
+    }
+    {//只要是部署了Iterator接口的数据结构，Array.from都能将其转为数组
+        let strarr = Array.from('hello');
+        console.log(strarr);//[ 'h', 'e', 'l', 'l', 'o' ]
+
+        let namesSet = new Set(['a','b']);
+        console.log(
+            Array.from(namesSet),//[ 'a', 'b' ]
+            [...namesSet],//[ 'a', 'b' ] 
+        );
+
+        //如果参数是一个真正的数组，Array.from会返回一个一模一样的新数组
+        console.log(Array.from([1,2,3]));//[1,2,3]
+    }
+    {/*Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质只有一点，即必须有length属性。
+        因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换*/
+        let arr = Array.from({length:3});
+        console.log(arr);//[ undefined, undefined, undefined ]
+        
+        //对于未支持Array.from的浏览器，可以用Array.prototype.slice方法替代
+        const toArray = (()=>
+            Array.from?Array.from : obj=>[].slice.call(obj)
+        )();
+    }
+    {//Array.from可以接受第二个参数，类似于map方法，对每个元素进行处理后，返回数组
+        let arrayLike = {
+            '0':1,
+            '1':2,
+            '2':3,
+            length:3
+        };
+        console.log(
+            Array.from(arrayLike,x=>x*x),//[ 1, 4, 9 ]
+            //等同于
+            Array.from(arrayLike).map(x=>x*x),//[ 1, 4, 9 ]
+
+            Array.from([1,2,3],x=>x*x),//[ 1, 4, 9 ]
+
+            //将数组中布尔值为false的成员转为0
+            Array.from([1,,3,4,,5],n=>n||0),//[ 1, 0, 3, 4, 0, 5 ]
+        )
+    }
+    {//返回各种数据的类型
+        function typesOf(){
+            return Array.from(arguments,value=>typeof value)
+        }
+        console.log(typesOf(null,[],NaN,{})) //[ 'object', 'object', 'number', 'object' ]
+    }
+    {//Array.from还提供map功能，这意味着，只要有一个原始的数据结构，你就可以先对它处理，转成规范的数据结构，进而就可以使用数组方法
+        console.log(
+            Array.from({length:3},()=>'jack')//[ 'jack', 'jack', 'jack' ]
+        )
+    }
+    {//Array.from的另一个应用是，将字符串转为数组，然后返回字符串的长度
+        //因为它能正确处理各种Unicode字符，可以避免JS将大于\uFFF的Unicode字符，算作两个字符的bug
+        function countSymbols(string){
+            return Array.from(string).length;
+        }
+        console.log(countSymbols('x\uD83d\uDE80y'));//3
+        
+        //正确返回字符串长度也可以像下面这样写
+        function strlen(str){
+            return [...str].length;
+        }
+        console.log(strlen('x\uD83d\uDE80y'));//3
+    }
+}
+{/**3 Array.of() */
+
+}
+//...TODO

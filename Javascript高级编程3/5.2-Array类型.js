@@ -6,6 +6,10 @@
  * 3 栈方法：push(),pop()
  * 4 队列方法:shift(),unshift() 
  * 5 重排序法：reverse(),sort() 
+ * 6 操作方法:concat(),slice(),splice() 
+ * 7 位置方法：indexOf(),lastIndexOf()
+ * 8 迭代方法：every(),filter(),forEach(),map(),some()
+ * 9 归并方法：reduce(),reduceRight()
  */
 {/**0 创建数组有2种方式
     * 一是Array，二是方括号 */
