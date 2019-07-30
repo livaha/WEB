@@ -149,13 +149,34 @@
             //const [first,...middle,last] = [1,2,3,4,5]; //报错
         }
         {//4 字符串
+            console.log(
+                [...'hello'],//[ 'h', 'e', 'l', 'l', 'o' ]
 
+                //能够正确识别四个字节的Unicode字符
+                'x\uD83d\uDE80y'.length, //4
+                [...'x\uD83d\uDE80y'].length, //3                
+            )
+            
+            //正确返回字符串长度应该像下面这样写
+            function strlen(str){
+                return [...str].length;
+            }
+            console.log(strlen('x\uD83d\uDE80y'));//3
+
+            //凡是涉及到操作四个字节的Unicode字符的函数，都有这个问题，因此最好都用扩展运算符改写
+            let str = 'x你好y';
+            let nstr = str.split('').reverse().join('');
+            console.log(nstr);//'y好你x'
+
+            let newstr = [...str].reverse().join('');
+            console.log(newstr);//'y好你x'
         }
         {//5 实现了Iterator接口的对象
-
+            //任何定义了遍历器(Iterator)接口的对象，都可以用扩展运算符转为真正的数组
+            //TODO
         }
         {//6 Map和Set结构，Generator函数
-
+            //TODO
         }
     }
 }
