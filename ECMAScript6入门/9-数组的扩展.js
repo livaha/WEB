@@ -231,12 +231,7 @@
     {/*Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质只有一点，即必须有length属性。
         因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换*/
         let arr = Array.from({length:3});
-        console.log(arr);//[ undefined, undefined, undefined ]
-        
-        //对于未支持Array.from的浏览器，可以用Array.prototype.slice方法替代
-        const toArray = (()=>
-            Array.from?Array.from : obj=>[].slice.call(obj)
-        )();
+        console.log(arr);//[ undefined, undefined, undefined ]        
     }
     {//Array.from可以接受第二个参数，类似于map方法，对每个元素进行处理后，返回数组
         let arrayLike = {
@@ -280,8 +275,41 @@
         }
         console.log(strlen('x\uD83d\uDE80y'));//3
     }
+    {/**模拟Array.from() */        
+        //对于未支持Array.from的浏览器，可以用Array.prototype.slice方法替代
+        const toArray = (()=>
+            Array.from?Array.from : obj=>[].slice.call(obj)
+        )();
+    }
 }
-{/**3 Array.of() */
+{/**3 Array.of() 
+    * Array.of方法用于将一组值，转换为数组*/
+   console.log(
+       Array.of(1,2,4),//[ 1, 2, 4 ]
+       Array.of(3),// [ 3 ]
+       Array.of(3,4).length //2
+   )
+   {//Array.of主要为弥补Array()的不足，因为参数不同，会导致Array()的行为有差异
+        console.log(
+            Array(),//[]
+            Array(3),//[<3 empty items>]
+            Array(2,3,4)// [ 2, 3, 4 ]
+        )
+   }
+   {//Array.of基本上可以用来替代Array()或new Array()，并且不存在由于参数不同而导致的重载。
+        console.log(
+            Array.of(),//[]
+            Array.of(3),//[3]
+            Array.of(undefined),//[undefined]
+            Array.of(2,4),//[2,4]
+        )
+
+   }
+   {/**模拟Array.of() */
+        function ArrayOf(){
+            return [].slice.call(arguments)
+        }
+   }
 
 }
 //...TODO
