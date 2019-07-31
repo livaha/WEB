@@ -173,6 +173,18 @@
         }
         {//5 实现了Iterator接口的对象
             //任何定义了遍历器(Iterator)接口的对象，都可以用扩展运算符转为真正的数组
+        //    let nodeList = document.querySelectorAll('div')//可以转换，是因为它实现了iterator
+        //    let array = [...nodeList]
+
+            Number.prototype[Symbol.iterator] = function*(){
+                let i = 0;
+                let num = this.valueOf();
+                while(i<num){
+                    yield i++;
+                }
+            }
+            console.log([...3]);//[ 0, 1, 2 ]
+            //上面代码中，先定义了Number对象的遍历器接口，扩展运算符将3自动转为Number实例以后，就会调用这个接口，就会返回自定义结果
             //TODO
         }
         {//6 Map和Set结构，Generator函数
