@@ -1,8 +1,8 @@
 /**
  * 6.2 创建对象
- * 6.2.1 工厂模式
- * 6.2.2 构造函数模式
- * 6.2.3 原型模式
+ * 6.2.1 工厂模式 （不如构造函数模式）
+ * 6.2.2 构造函数模式 (不如原型模式)
+ * 6.2.3 原型模式 (主要了解)
  * 
  * 虽然Object构造函数或对象字面量都可以用来创建单个对象，但这些方式有个明显的缺点：
  * 使用同一个接口创建很多对象，会产生大量的重复代码。为解决这个问题，人们开始使用工厂模式的一种变体。
@@ -69,5 +69,59 @@
     )
     //创建自定义的构造函数意味着将来可以将它的实例识别为一种特定的类型；而这正是构造函数模式胜过工厂模式的地方。
 
+    //1 将构造函数当作函数
+    /**构造函数和其他函数唯一的区别，就在于调用他们的方式不同，不过构造函数也是函数，不存在定义构造函数的特殊语法。
+     * 任何函数，只要通过new操作符来调用，那它就可以作为构造函数，而任何函数，如果不通过new操作符来调用，那它跟普通函数一样。
+     * 前面的例子定义的Person()函数可以通过下列任一种方式来调用 。
+     */
+    //当作构造函数
+    let person = new Person('Hei',23,'Engineer');
+    person.sayName();//Hei
+
+    //作为普通函数调用
+    Person('Greg',43,'Doctor');//添加到window
+    //window.sayName(); //'Greg'
+
+    //在另一个对象的作用域中调用
+    let o = new Object();
+    Person.call(o,'Krei',3,'Baby');
+    o.sayName();//Krei
+
+    //2 构造函数的问题
+    {/**构造函数模式缺点：每个方法都要在每个实例上重新创建一遍。
+        在前面例子中，person1和person2都有一个名为sayName()的方法，但那两个方法不是同一个Function的实例。
+        ECMAScript中的函数是对象，因此每定义一个函数，也就实例化了一个对象。
+        此时构造函数也可以这样定义： */
+        function Person(name,age,job){
+            this.name = name;
+            this.age = age;
+            this.job = job;
+            this.sayName = new Function('console.log(this.name)');//与声明函数在逻辑上是等价的
+        }
+        let person1 = new Person('Nicho',23,'Engineer');
+        let person2 = new Person('Hei',22,'Doc');
+        console.log(person1.sayName === person2.sayName);//false
+        
+        //创建两个完成同样任务的Function实例的确没有必要，况且有this对象在，根本不用在执行代码前就把函数绑定到特定对象上面
+        //可像下面这样，把函数定义转移到构造函数外来解决这个问题
+        {
+            function Person(name,age,job){
+                this.name = name;
+                this.age = age;
+                this.job = job;
+                this.sayName = sayName
+            }
+
+            function sayName(){
+                console.log(this.name)
+            }
+            let person1 = new Person('Nicho',23,'Engineer');
+            let person2 = new Person('Hei',22,'Doc');
+            /**这个例子中，我们把sayName()函数的定义转到了构造函数外部，这确实解决了两个函数做同一件事的问题，
+             * 但是，如果需要定义很多方法，那就要定义很多个全局函数，于是我们这个自定义的引用类型就没有封装性可言了。
+             * 好在，这些问题可以通过使用原型模式来解决
+             */
+        }
+    }
 
 }
