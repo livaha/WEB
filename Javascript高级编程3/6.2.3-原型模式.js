@@ -161,3 +161,63 @@
     console.log(pkeys);//[ 'constructor', 'name', 'age', 'job', 'sayName' ]
     //结果包含了不可枚举的constructor属性，Object.keys()和Object.getOwnPropertyNames()都可以替代for-in。（IE9+）
 }
+{//3 更简单的原型语法
+    function Person(){
+
+    }
+    Person.prototype = {
+        name : 'Nick',
+        age:33,
+        job:'Engineer',
+        sayName:function(){
+            console.log(this.name)
+        }
+    }
+    //上面代码中，我们将Person.prototype设置为等于一个以对象字面量形式创建的新对象，最终结果相同，但有一个例外:
+    //constructor属性不再指向Person了，而是指向Object构造函数
+    //此时，尽管instanceof能返回正确的结果，但constructor已经无法确定对象的类型了
+    let friend = new Person();
+    console.log(
+        friend instanceof Object,//true
+        friend instanceof Person,//true
+        friend.constructor ==Person,//false
+        friend.constructor == Object//true
+    )
+    
+    //如果constructor的值真的很重要，可以像下面这样特意将它设置回适当的值
+    {
+        function Person(){
+
+        }
+        Person.prototype = {
+            constructor:Person,//这种方式导致constructor属性的[[Enumerable]]特性被设为true
+            name : 'Nick',
+            age:33,
+            job:'Engineer',
+            sayName:function(){
+                console.log(this.name)
+            }
+        }        
+    }
+
+    {
+        //默认情况下，constructor属性是不可枚举的，如果你使用兼容ES5的JS引擎，可以试试Object.defineProperty()
+        function Person(){
+
+        }
+        Person.prototype = {
+            name : 'Nick',
+            age:33,
+            job:'Engineer',
+            sayName:function(){
+                console.log(this.name)
+            }
+        }
+        //重设构造函数，只适用于ES5兼容的浏览器
+        Object.defineProperty(Person.prototype,'constructor',{
+            enumerable:false,
+            value:Person
+        })
+    }
+
+}
