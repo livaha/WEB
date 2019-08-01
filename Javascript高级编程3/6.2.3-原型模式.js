@@ -12,7 +12,7 @@
     }
     Person.prototype.name = 'Nick';
     Person.prototype.age = 23;
-    Person.prototype.josn = 'Doctor';
+    Person.prototype.job = 'Doctor';
     Person.prototype.sayName = function(){
         console.log(this.name)
     }
@@ -76,4 +76,87 @@
     console.log(person5.name);//Nick
     console.log(person5.hasOwnProperty('name'));//false
 
+}
+{//2 原型与in操作符    
+    /**有两种方式使用in操作符：单独使用和在for-in循环中使用。
+     * 在单独使用时，in会在通过对象能够访问给定属性时返回true,无论该属性存在于实例中还是原型中。
+     */
+    function Person(){
+    }
+    Person.prototype.name = 'Nick';
+    Person.prototype.age = 23;
+    Person.prototype.job = 'Doctor';
+    Person.prototype.sayName = function(){
+        console.log(this.name)
+    }
+    let person1 = new Person();
+    let person2 = new Person();
+    console.log(person1.hasOwnProperty('name'));//false
+    console.log('name' in person1);//true
+
+    person1.name = 'Grep';
+    console.log(
+        person1.name,//Grep 来自实例
+        person1.hasOwnProperty('name'), //true
+        'name' in person1, //true
+    )
+
+    console.log(
+        person2.name,//Nick 来自原型
+        person2.hasOwnProperty('name'), //false
+        'name' in person2 //true
+    )
+
+    delete person1.name;
+    console.log(
+        person1.name, //Nick 来自原型
+        person1.hasOwnProperty('name'), //false
+        'name' in person1 //true
+    )
+    /**在以上代码中，name属性要么是直接在对象上访问的到的，要么是通过原型访问到的，因此'name ' in person1 始终返回true,
+     * 无论譔属性存在于实例中还是存在于原型中，同时使用hasOwnProperty()方法和in操作符，就可以确定该属性到底是存在于对象中，还是存在于原型中
+     */
+    //name in object始终返回true,则可以通过object.hasOwnProperty判断是否有原型属性
+    //只要hasOwnProperty()返回false，就可以确定属性是原型中的属性
+    function hasPrototypeProperty(object,name){
+        return !object.hasOwnProperty(name) && (name in object)
+    }
+
+    //使用hasPrototypeProperty（）
+    let person = new Person();
+    console.log(hasPrototypeProperty(person,'name'));//true
+
+    person.name = 'Greg';
+    console.log(hasPrototypeProperty(person,'name'));//false
+    //在实例中重写name属性后，虽然原型中仍然有name属性，但由于在实例中也有了这个属性，因此原型中的name属性就用不到了
+
+    //在使用for-in循环时，返回的是所有能够通过对象访问的，可枚举的(enumerated)属性，其中既包括存在于实例中的属性，也包括存在于原型中的属性。
+    //屏蔽了原型中不可枚举属性（即将[Enumerable]标志为false的属性)的实例属性也会在for-in循环中返回，因为根据规定，
+    //所有开发人员定义的属性都是可枚举的，IE8例外 
+    let o = {
+        toString:function(){
+            return 'My Object';
+        }
+    };
+    for(let prop in o){
+        if(prop === 'toString'){
+            console.log('Found toString');//在IE中不会显示
+        }
+    }
+
+    //要取得对象上所有可枚举的实例属性，可以使用ES5的Object.keys()方法，这个方法接收一个对象作为参数，
+    //返回一个包含所有可枚举属性的字符串数组
+    let keys = Object.keys(Person.prototype);
+    console.log(keys);//[ 'name', 'age', 'job', 'sayName' ]
+
+    let p1 = new Person();
+    p1.name = 'Rob';
+    p1.age = 32;
+    let p1keys = Object.keys(p1);
+    console.log(p1keys);//[ 'name', 'age' ] //通过实例调用，只返回两个实例属性
+
+    //如果你想要得到所有实例属性，无论它是否可枚举，都可以使用Object.getOwnPropertyNames()方法
+    let pkeys = Object.getOwnPropertyNames(Person.prototype);
+    console.log(pkeys);//[ 'constructor', 'name', 'age', 'job', 'sayName' ]
+    //结果包含了不可枚举的constructor属性，Object.keys()和Object.getOwnPropertyNames()都可以替代for-in。（IE9+）
 }
