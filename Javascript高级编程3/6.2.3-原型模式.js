@@ -221,4 +221,80 @@
     }
 
 }
-//TODO
+{//4 原型的动态性
+    //由于在原型中查找值的过程是一次搜索，因此我们对原型对象所做的任何修改都能够立即从实例上反映出来 
+    //---即使是先创建了实例后修改原型也照样如此 。
+    {
+        let friend = new Person();
+        Person.prototype.sayHi = function(){
+            console.log('hi');
+        }
+        friend.sayHi(); //Hi 没有问题
+
+        /**以上代码先创建了Person的一个实例，并将其保存在person中，然后，下一条语句在Person.prototype中添加了一个方法sayHi().
+         * 即使person实例是在添加新方法之前创建的，但它仍然可以访问这个新方法。其原因可以归结为实例与原型之间的松散连接关系。
+         * 当我们调用person.sayHi()时，首先会在实例中搜索名为sayHi的属性，在没找到的情况下，会继续搜索原型。
+         * 因为实例与原型之间的连接是一个指针，而非一个副本，因此就可以在原型中找到新的sayHi属性并返回保存在那里的函数 。
+         */
+    }
+    
+     /**尽管可以随时为原型添加属性和方法， 并且修改能够立即在所有对象实例中反映出来，但如果是重写整个原型对象，那情况就不一样了。
+      * 我们知道，调用构造函数时会为实例添加一个指向最初原型的[[Prototype]]指针，而把原型修改为另外一个对象就等于切断了构造函数与最初原型之间的联系。
+      * 实例中的指针仅指向原型，而不是指向构造函数。，如下例
+     */
+    {
+        function Person(){
+
+        }
+        let friend = new Person();
+        Person.prototype = {
+            constructor:Person,
+            name:'Nick',
+            age:4,
+            job:'Student',
+            sayName:function(){
+                console.log(this.name);
+            }
+        }
+        //friend.sayName();//TypeError: friend.sayName is not a function
+        /**在这个例子中，我们先创建了Person的一个实例，又重写了其原型对象，然后在调用friend.sayName()时发生了错误，
+         * 因为friend指向的原型中不包含以该名字命名的属性。
+         * 
+         * 重写原型对象切断了现有原型与任何之前已经存在的对象实例之间的联系，它们引用的仍然是最初的原型。
+         */
+    }
+}
+{//5 原型对象的原型
+    //TODO
+
+}
+{//6 原型对象的问题
+    /**原型模式的缺点：1 它省略了为构造函数传递初始化参数这一环节，结果所有实例在默认情况下都将取得相同的属性值。
+     * 2 原型模式的最大问题是由其共享的本性所导致的。
+     * 原型中所有属性是被很多实例共享的，这种共享对于函数非常合适，对于那些包含基本值的属性说的过去，通过在实例上添加一个同名属性可以隐藏原型中的对应属性。
+     * 但对于包含引用类型值的属性来说，问题就比较突出了。
+     */
+
+    function Person(){
+
+    }
+    Person.prototype = {
+        constructor:Person,
+        name:'Nick',
+        age:4,
+        job:'Student',
+        friends:['Abo','Bob'],
+        sayName:function(){
+            console.log(this.name);
+        }
+    }
+    let person1 = new Person();
+    let person2 = new Person();
+    person1.friends.push('Cap');
+    console.log(
+        person1.friends,//[ 'Abo', 'Bob', 'Cap' ] 
+        person2.friends,//[ 'Abo', 'Bob', 'Cap' ] 
+        person1.friends === person2.friends,//true
+    )
+    //修改了person1.friends，导致person2.friends也发生了变化
+}
