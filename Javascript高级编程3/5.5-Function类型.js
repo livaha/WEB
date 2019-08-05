@@ -150,7 +150,7 @@
 
     {//函数内部的另一个特殊对象是this,this引用的是函数据以执行的环境对象--或者也可以说是this值
         //（当在网页的全局作用域中调用函数时，this对象引用的就是window)
-        window.color = 'red';
+        //window.color = 'red';
         let o = {color:'blue'};
 
         function sayColor(){
@@ -166,7 +166,7 @@
     {//函数对象另一个属性: caller
         //这个属性中保存着调用当前函数的函数的引用，如果是在全局作用域中调用当前函数，它的值为null
         function outer(){
-            innerHeight();
+            inner();
         }
         function inner(){
             console.log(inner.caller);
@@ -180,7 +180,7 @@
                 inner();
             }
             function inner(){
-                console.log(console.log(arguments.callee.caller));
+                console.log('1' ,console.log(arguments.callee.caller));//undefined
             }
             outer();
         }
