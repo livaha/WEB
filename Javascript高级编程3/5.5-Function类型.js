@@ -12,6 +12,7 @@
  *       arguments,this
  *       arguments.callee,caller
  * 5.5.5 函数的属性和方法
+ */
 {//5.5.0 定义函数
     function sum1(num1,num2){
         return num1+num2;
