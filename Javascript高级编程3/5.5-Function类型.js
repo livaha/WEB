@@ -10,7 +10,8 @@
  *       假设有一个数组，我们想要根据某个对象属性对数组进行排序
  * 5.5.4 函数内部属性
  *       arguments,this
- */
+ *       arguments.callee,caller
+ * 5.5.5 函数的属性和方法
 {//5.5.0 定义函数
     function sum1(num1,num2){
         return num1+num2;
@@ -119,5 +120,76 @@
      * 但是这个对象还有一个名叫callee的属性，该属性是一个指针，指向拥有这个arguments对象的函数。
      */
     //例阶乘函数
-    
+    function factorial(num){
+        if(num<1){
+            return 1;
+        }
+        else{
+            return num*factorial(num-1)
+        }
+    }
+    //定义阶乘函数一般要用到递归算法，在函数有名字的情况下，如果将函数的执行与函数名factorial紧紧耦合在一起，如果函数名改变，会出现问题。
+    //为了消除这种紧密耦合的现象，可以调用 arguments.callee
+    function factorial2(num){
+        if(num<=1){
+            return 1;
+        }else{
+            return num*arguments.callee(num-1)
+        }
+    }
+    //在重写后的factorial2()函数体内，没有再直接引用函数名factorial，这样，无论引用函数时使用的是什么名字，都可以保证正常完成递归调用。
+    //例如
+    let trueFactorial = factorial2;
+    factorial2 = function(){
+        return 0;
+    };
+    console.log(trueFactorial(5));//120
+    console.log(factorial2(5));//0
+    //将factorial2改变函数体，如果像factorial函数一样直接调用factorial函数名，则trueFactorial返回0
+
+    {//函数内部的另一个特殊对象是this,this引用的是函数据以执行的环境对象--或者也可以说是this值
+        //（当在网页的全局作用域中调用函数时，this对象引用的就是window)
+        window.color = 'red';
+        let o = {color:'blue'};
+
+        function sayColor(){
+            console.log(this.color);
+        }
+        sayColor();//'red'
+        o.sayColor = sayColor;
+        o.sayColor();//blue
+
+        //牢记，函数的名字仅仅是一个包含指针的变量而已，即使是在不同的环境中执行，全局的sayColor函数与o.sayColor指向的仍然是同一个函数
+
+    }
+    {//函数对象另一个属性: caller
+        //这个属性中保存着调用当前函数的函数的引用，如果是在全局作用域中调用当前函数，它的值为null
+        function outer(){
+            innerHeight();
+        }
+        function inner(){
+            console.log(inner.caller);
+        }
+        outer();
+
+        //以上代码会导致警告框中显示outer函数的源代码，因为outer调用了inner，所以，inner.caller就指向outer().
+        //为了实现更松散的耦合，也可以通过arguments.callee.caller来访问相同的信息。
+        {
+            function outer(){
+                inner();
+            }
+            function inner(){
+                console.log(console.log(arguments.callee.caller));
+            }
+            outer();
+        }
+
+        //严格模式下，访问arguments.callee会导致错误。ES5定义了arguments.caller属性，但在严格模式下访问它会导致错误；
+        //而在非严格模式下，这个属性始终是undefined.定义这个属性是为了分清arguments.caller和函数的caller属性。
+        //严格模式还有一个限制：不能为函数的caller属性赋值，否则会导致错误。
+    }
+}
+{//5.5.5 函数的属性和方法
+    //见文件'5.5.5-函数属性和方法.js'
+
 }
