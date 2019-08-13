@@ -103,5 +103,8 @@
         //如果对于'Make an error'回答'YES'，则执行try-->catch-->finally
         //如果回答'NO'，则执行try-->finally
     }
-//https://zh.javascript.info/try-catch#trycatchfinally
+    
+    /**finally语法通常用在：不管在try...catch代码块中执行的结果怎样，都想结束时执行某个操作
+     * 比如下例斐波那契函数，如果该函数在被调用的过程中发生异常，就如执行下面的代码就返回负数或者非整数的异常。
+     */
 }
