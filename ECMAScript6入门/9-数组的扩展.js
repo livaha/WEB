@@ -1,8 +1,8 @@
 /**数组的扩展
  * 1 扩展运算符
- * 2 Array.from()
- * 3 Array.of()
- * 4 数组实例的 copyWithin()
+ * 2 Array.from()  用于将两类对象转为真正的数组
+ * 3 Array.of() 用于将一组值，转换为数组。
+ * 4 数组实例的 copyWithin() 在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员）｜会修改当前数组
  * 5 数组实例的 find() 和 findIndex()
  * 6 数组实例的 fill()
  * 7 数组实例的 entries()，keys() 和 values()
@@ -322,6 +322,46 @@
             return [].slice.call(arguments)
         }
    }
+
+}
+{/**4 数组的copyWithin */
+    //Array.prototype.copyWithin(target,start=0,end=this.length)
+    //target必需：从该位置开始替换，如果为负值，表示倒数
+    //start可选:从该位置开始读取数据，默认为0，如果为负值，表示  从尾部开始计算
+    //end可选：到该位置前停止读取数组长度，如果为负值，表示从尾部开始计算
+    console.log(
+        [1,2,3,4,5].copyWithin(0,3),//[ 4, 5, 3, 4, 5 ]
+        [1,2,3,4,5].copyWithin(0,-2,-1),//[ 4, 2, 3, 4, 5 ]
+        [].copyWithin.call({length:5,3:1},0,3),//{ '0': 1, '3': 1, length: 5 }
+
+    )
+    let i32a = new Int32Array([1,2,3,4,5]);
+    console.log(
+        i32a.copyWithin(0,2),//Int32Array [ 3, 4, 5, 4, 5 ]
+        [].copyWithin.call(new Int32Array([1,2,3,4,5]),0,3,4)//Int32Array [ 4, 2, 3, 4, 5 ]
+    )
+}
+{/**5 组件实例find()和findIndex() */
+    //find 找出第一个符合条件的数组成员，没有返回undefined
+    //findIndex 返回第一个符合条件的数组成员位置，没有返回-1
+
+    console.log(
+        [1,24,-3,10].find((n)=>n<0),//-3
+        [1,4,6,8].find(function(val,index,arr){//参数依次为 当前值，当前位置，原数组
+            return val>4
+        }),//6
+        
+        [1,4,6,8].findIndex(function(val,index,arr){
+            return val>4
+        }),//2
+    )
+    function f(v){
+        return v > this.age;
+      }
+      let person = {name: 'John', age: 20};
+      console.log(
+          [10, 12, 26, 15].find(f, person)   // 26
+      )
 
 }
 //...TODO
